@@ -1,24 +1,24 @@
-# Validation — version 0.2
+# Validation — Neon review
 
-Automated DOM/interface checks cover:
+Run `npm run build:pages && npm test && npm run verify:rainbow`.
 
-- Create orange Herman without modifying green Moss.
-- Both workstations remain in the shared room when selecting either agent.
-- Distinct colors and avatar shapes persist across reloads.
-- Edit Herman's instructions and role; verify all Moss fields are unchanged.
-- Run Herman while Moss remains idle, then run both concurrently.
-- Pause Moss without pausing Herman; resume Moss independently.
-- Incoming runtime events preserve an unsaved configuration draft.
-- Inspect Herman's trace; verify running tasks retain their original configuration snapshot.
-- Add a third agent without replacing either existing agent.
-- Reload identities, histories, configuration changes, and tutorial drafts.
-- Migrate original v1 records while retaining IDs, instructions, histories, and the legacy tutorial record.
-- Complete all eight tutorial lessons through eleven actual interface actions, including creation, execution, inspection, scoring, instruction revision, and comparison.
-- Pause/resume, disable, and replay the tutorial without deleting agents.
-- Practice failure, retry, and cancel remain functional.
-- Backup import merges independent agents without duplication, rejects invalid identity data before mutation, and preserves existing records.
-- Twenty workstations are retained in the scrollable room structure; custom colors, accessories, and symbols persist.
-- User-entered names are escaped, and nameplate text contrast passes 4.5:1 across 1,331 sampled custom colors.
-- Runtime checks preserve numeric source data, apply supported instruction cues, enforce disabled-tool errors, and keep events attached to the correct run.
+Tests use actual app/runtime code. Interface tests run in jsdom, not a rendered browser.
 
-These checks run against the real application scripts in a DOM environment. They are not screenshots or full browser rendering tests. The embedded browser's local-file security restriction and an unreachable local preview server prevented visual verification at desktop/mobile sizes. Responsive styling and reduced-motion handling are implemented, but their rendered layout still requires a normal-browser visual check.
+| Suite | Coverage |
+|---|---|
+| runtime | Deterministic extracts/checklists, decimals, instruction cues, disabled tools, failures, cancellation and events |
+| ui | Independent Moss/Herman/third agent, concurrent execution, pause/resume, event-safe drafts, migration, all eight lessons through eleven real actions, scoring/comparison, retry/cancel |
+| recovery | Every stage skippable, honest progress counts, help, Back/Exit/Resume, practice-only reset |
+| management | Configuration versions, lifecycle, duplicates, queue ordering/cancel/dispatch, refresh without replay, actual payload consumed by evaluator, both histories, inspector/timeline, sessions, memory, extended backup round trip |
+| themes | Default Neon, three adapters, independent persistent preference, unchanged workspace records, text palette contrast and reduced-motion rule |
+| edge cases | Legacy backup merge/deduplication, invalid ID rejection, 20-agent room structure, escaped names, 1,331 nameplate contrast samples |
+| pages | Self-contained entry at a Pages repository subpath, initialization and export/import controls |
+| preservation | Seven original tagged app assets match the existing SHA-256 manifest |
+
+## Manual checks and limits
+
+Source/data-flow review covers explicit dispatch, no automatic task replay, payload linkage, practice reset boundaries, local storage, snapshots, and excluded account/export files.
+
+The server started, but the in-app browser reported `ERR_CONNECTION_TIMED_OUT` for its local address. No successful browser-rendered test is claimed. Desktop/mobile layout, animation alignment, keyboard traversal, and screen-reader behavior remain review items in REVIEW.md. Contrast checks cover selected palette pairs/nameplates, not full accessibility conformance.
+
+No real provider, external tool, token accounting, persistent backend execution, or factual evaluation is tested or claimed. Fixed evaluator checks do not replace human review.

@@ -1,4 +1,18 @@
-# Publication audit — v0.1.0-rainbow
+# Privacy review — 0.2.0-neon-review
+
+Date: 2026-11-10. Scope: tracked review-branch source, generated Pages bundle, tests, scripts, documentation, and commit metadata. This is a local review; no upload, push, merge, or deployment was performed.
+
+- Reviewed new persistence, queue dispatch, handoff, session/memory, backup, and theme code. Runtime work stays in the browser. No credentials, model calls, telemetry, or upload endpoints were introduced.
+- New avatars and room art are inline SVG/CSS. The existing optional Google Fonts request remains documented in PRIVACY.md; it does not contain workspace text.
+- Tests use synthetic records. No actual browser workspace was extracted, and no personal export, document, screenshot, attachment, or account file is included.
+- Local hosting/account metadata and dependencies remain ignored. The review ZIP is generated from committed Git files, not the surrounding output directory.
+- The staged-byte secret/private-data scanner reports no matches for its configured patterns. This is a bounded scan plus source review, not a guarantee against every possible secret format.
+- Commit identity continues using the public GitHub login and no-reply address. The original Rainbow tag and seven asset hashes are unchanged.
+- Backups now include memories, session summaries, and handoff payloads. The interface and documentation explicitly warn that backups and browser storage are unencrypted and should remain private.
+
+The original preservation audit below describes only the original tagged release; its byte-for-byte application assertions do not apply to the new review version.
+
+# Historical publication audit — v0.1.0-rainbow
 
 Audit date: 2026-11-10. Scope: the intended first Git commit, its public application bundle, and the release/tag metadata. The audit is for this snapshot, not future changes.
 

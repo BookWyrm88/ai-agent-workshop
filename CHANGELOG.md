@@ -1,3 +1,7 @@
+# 0.2.0-neon-review — local review, not deployed
+
+Tutorial recovery and isolated practice fixtures; roster/lifecycle/configuration versions; persistent task queues; recorded Research → Evaluation handoffs and shared timeline; sessions/intentional memory; three interchangeable visual themes. The original `v0.1.0-rainbow` tag is unchanged. See README.md for implemented scope and deferred integrations.
+
 # Changelog
 
 ## v0.1.0-rainbow — 2026-11-10

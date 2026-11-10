@@ -1,3 +1,5 @@
+> **Review branch:** this working version is not approved for publication. Do not push, merge, or deploy it until explicitly approved. The instructions below remain available for the later release step.
+
 # Publish the preserved Rainbow release
 
 The local Git repository is ready. Its annotated release tag is **v0.1.0-rainbow**. Publishing is separate from preservation: the release can be restored locally even before GitHub is configured.
