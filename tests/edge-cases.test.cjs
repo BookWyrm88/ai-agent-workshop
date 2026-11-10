@@ -3,16 +3,16 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const root=path.resolve(__dirname,'../dist');
 const errors=[];
 const dom=new JSDOM('<div id="app"></div><div id="toast"></div>',{url:'http://workshop.test',runScripts:'outside-only',pretendToBeVisual:true});
-const w=dom.window,d=w.document;w.structuredClone=structuredClone;w.scrollTo=()=>{};w.HTMLElement.prototype.scrollIntoView=()=>{};
+const w=dom.window,d=w.document;w.structuredClone=structuredClone;w.localStorage.setItem('ai-agent-workshop.theme.v1','spectrum');w.scrollTo=()=>{};w.HTMLElement.prototype.scrollIntoView=()=>{};
 w.addEventListener('error',e=>errors.push(e.error));
-for(const f of ['engine.js','identity.js','model.js','headquarters.js','themes.js','app.js'])w.eval(fs.readFileSync(path.join(root,f),'utf8'));
+for(const f of ['engine.js','human.js','identity.js','model.js','spatial.js','space-view.js','systems.js','headquarters.js','themes.js','app.js'])w.eval(fs.readFileSync(path.join(root,f),'utf8'));
 const q=s=>d.querySelector(s),click=s=>q(s).click(),submit=s=>q(s).dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));
 const fill=(s,v)=>{q(s).value=v;q(s).dispatchEvent(new w.Event('input',{bubbles:true}));};
 const saved=()=>JSON.parse(w.localStorage.getItem('ai-agent-workshop.v1'));
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 async function loadBackup(data){const input=q('#import-file');Object.defineProperty(input,'files',{configurable:true,value:[{size:1000,text:async()=>JSON.stringify(data)}]});input.dispatchEvent(new w.Event('change'));await wait(30);}
 (async()=>{
- const source=saved();const fresh=structuredClone(source.agents[0]);fresh.id='imported-herman';fresh.name='Herman';delete fresh.color;delete fresh.avatar;delete fresh.accessory;delete fresh.symbol;source.agents=[fresh];source.runs=[];source.messages=[];delete source.sessions;delete source.memories;delete source.handoffs;delete source.versions;delete fresh.sessionId;
+ const source=saved();const fresh=structuredClone(source.agents[0]);fresh.id='imported-herman';fresh.name='Herman';delete fresh.color;delete fresh.avatar;delete fresh.accessory;delete fresh.symbol;source.agents=[fresh];source.runs=[];source.messages=[];delete source.space;delete source.sessions;delete source.memories;delete source.handoffs;delete source.versions;delete fresh.sessionId;
  await loadBackup(source);assert.equal(saved().agents.length,2);assert.equal(saved().agents[1].color,'#de8735');await loadBackup(source);assert.equal(saved().agents.length,2,'Reimport must not duplicate identities');
  const bad=structuredClone(source);bad.agents[0].id='invalid" onclick="alert(1)';await loadBackup(bad);assert.equal(saved().agents.length,2);assert.match(q('#toast').textContent,/invalid agent/);
  const many=structuredClone(source);many.agents=Array.from({length:18},(_,i)=>({...fresh,id:'extra-'+i,name:'Agent '+i}));await loadBackup(many);assert.equal(d.querySelectorAll('.station').length,20);assert.ok(q('.room-scroll'));assert.ok(q('.station-grid').getAttribute('style').includes('3'));

@@ -19,15 +19,15 @@ window.WorkshopData = (() => {
     }
     // Work in progress is never replayed automatically. Pending assignments are retained but held.
     for(const r of state.runs){
-      if(['working','using-tool','paused','waiting'].includes(r.status)){
+      if(['working','using-tool','paused','waiting'].includes(r.status)&&!(r.status==='waiting'&&r.requiresApproval&&!r.approved)){
         r.status='cancelled';r.finished=now();event(r,'task.interrupted','Stopped by refresh',{message:'Execution stops when the page closes. Retry explicitly to create a new run.'});
       }
-      if(r.status==='queued')state.queuePaused[r.agentId]=true;
+      if(['queued','waiting'].includes(r.status))state.queuePaused[r.agentId]=true;
     }
     for(const h of state.handoffs){const target=state.runs.find(r=>r.id===h.recipientRunId);if(target&&['failed','cancelled'].includes(target.status))h.status=target.status;}
   }
   function enqueue(state,a,task,options={}){
-    const r={id:id(),agentId:a.id,sessionId:a.sessionId,task,config:clone(a),created:now(),started:now(),status:'queued',events:[],evaluation:null,queueOrder:Math.max(0,...state.runs.map(r=>r.queueOrder||0))+1,...options};
+    const r={id:id(),agentId:a.id,sessionId:a.sessionId,task,config:clone(a),created:now(),started:now(),status:'queued',requiresApproval:state.settings?.approval?.[a.id]===true,approved:false,events:[],evaluation:null,queueOrder:Math.max(0,...state.runs.map(r=>r.queueOrder||0))+1,...options};
     state.runs.unshift(r);event(r,'task.queued','Task added to queue',{version:a.version});return r;
   }
   const pending=(state,agentId)=>state.runs.filter(r=>r.agentId===agentId&&r.status==='queued').sort((a,b)=>(a.queueOrder||0)-(b.queueOrder||0));

@@ -5,13 +5,14 @@ const assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'../dist');
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 const errors=[];const windows=[];
+async function until(test){for(let i=0;i<100;i++){if(test())return;await wait(25);}assert.ok(test(),'Timed out waiting for recorded state');}
 function open(saved,delay=50){
   const dom=new JSDOM('<!doctype html><div id="app"></div><div id="toast"></div>',{url:'http://workshop.test',runScripts:'outside-only',pretendToBeVisual:true});
-  windows.push(dom.window);const w=dom.window;w.structuredClone=structuredClone;w.scrollTo=()=>{};w.HTMLElement.prototype.scrollIntoView=()=>{};
+  windows.push(dom.window);const w=dom.window;w.structuredClone=structuredClone;w.localStorage.setItem('ai-agent-workshop.theme.v1','spectrum');w.scrollTo=()=>{};w.HTMLElement.prototype.scrollIntoView=()=>{};
   w.addEventListener('error',e=>errors.push(e.error));if(saved)w.localStorage.setItem('ai-agent-workshop.v1',saved);
   w.eval(fs.readFileSync(path.join(root,'engine.js'),'utf8'));
   const Original=w.WorkshopCore.AgentRuntime;w.WorkshopCore.AgentRuntime=class extends Original{constructor(){super(undefined,delay);}};
-  w.eval(fs.readFileSync(path.join(root,'identity.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'model.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'headquarters.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'themes.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'app.js'),'utf8'));
+  w.eval(fs.readFileSync(path.join(root,'human.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'identity.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'spatial.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'space-view.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'model.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'systems.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'headquarters.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'themes.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'app.js'),'utf8'));
   const d=w.document;
   const q=s=>{const e=d.querySelector(s);assert.ok(e,'Missing '+s);return e;};
   const click=s=>q(s).click();
@@ -45,7 +46,7 @@ function createAgent(t,name,color='#de8735',shape='square'){
   await wait(300);assert.equal(t.q('#config-form [name="role"]').value,'Quality reviewer','Background events preserve dirty fields');
   assert.equal(t.stored().runs.find(r=>r.config.name==='Herman').status,'completed');assert.equal(t.stored().runs.find(r=>r.config.name==='Moss').status,'paused');
   t.submit('#config-form');t.click('[data-view="laboratory"]');assert.match(t.q('.trace-list').textContent,/Document received/);assert.ok(t.stored().runs.filter(r=>r.config.name==='Herman').every(r=>r.config.role==='Document explorer'),'Running configuration snapshots stay immutable');
-  t.click('[data-view="workshop"]');t.select('Moss');t.click('[data-action="resume"]');await wait(280);assert.equal(t.stored().runs.find(r=>r.config.name==='Moss').status,'completed');
+  t.click('[data-view="workshop"]');t.select('Moss');t.click('[data-action="resume"]');await until(()=>t.stored().runs.find(r=>r.config.name==='Moss').status==='completed');assert.equal(t.stored().runs.find(r=>r.config.name==='Moss').status,'completed');
   createAgent(t,'Iris','#a96bb4','cat');assert.equal(t.d.querySelectorAll('.station').length,3);
   const reopened=open(t.save());assert.equal(reopened.d.querySelectorAll('.station').length,3);assert.equal(reopened.stored().agents.find(a=>a.name==='Herman').role,'Quality reviewer');assert.equal(reopened.stored().agents[0].instructions,JSON.parse(mossBefore).instructions);
   console.log('PASS: requested Moss/Herman workflow, distinct identity, side-by-side workstations, independent configuration/history, concurrent execution, switching, selected controls, event-safe editing, and third agent persistence.');
@@ -59,18 +60,18 @@ function createAgent(t,name,color='#de8735',shape='square'){
   // Refresh mid-creation restores both draft and tutorial stage.
   const resumed=open(lesson.save(),25);assert.equal(resumed.stored().tutorial.step,2);assert.match(resumed.q('#dialog-title').textContent,/Create New Agent/);assert.equal(resumed.stored().agents.length,2);
   resumed.fill('#create-form [name="instructions"]','Summarize accurately. Use bullets.');resumed.submit('#create-form');assert.equal(resumed.stored().tutorial.step,3);resumed.submit('#create-form');assert.equal(resumed.stored().tutorial.step,4);
-  resumed.click('[data-action="pause-tutorial"]');resumed.click('[data-prompt="Summarize the sample document"]');resumed.submit('#task-form');await wait(160);assert.equal(resumed.stored().tutorial.step,4,'Paused tutorials do not advance');
-  resumed.click('[data-action="continue-tutorial"]');resumed.click('[data-prompt="Summarize the sample document"]');resumed.submit('#task-form');assert.equal(resumed.stored().tutorial.step,5);await wait(160);
+  resumed.click('[data-action="pause-tutorial"]');resumed.click('[data-prompt="Summarize the sample document"]');resumed.submit('#task-form');await until(()=>resumed.stored().runs[0].status==='completed');assert.equal(resumed.stored().tutorial.step,4,'Paused tutorials do not advance');
+  resumed.click('[data-action="continue-tutorial"]');resumed.click('[data-prompt="Summarize the sample document"]');resumed.submit('#task-form');assert.equal(resumed.stored().tutorial.step,5);await until(()=>resumed.stored().runs[0].status==='completed');
   resumed.click('.activity-panel [data-view="laboratory"]');assert.equal(resumed.stored().tutorial.step,6);
   resumed.q('#output-details').open=true;resumed.q('#output-details').dispatchEvent(new resumed.w.Event('toggle'));assert.equal(resumed.stored().tutorial.step,7);
   resumed.fill('[name="accuracy"]','5');resumed.fill('[name="coverage"]','3');resumed.fill('[name="notes"]','Missing uncertainty.');resumed.submit('#evaluation-form');assert.equal(resumed.stored().tutorial.step,8);assert.match(resumed.q('h1').textContent,/Edit Herman/);
   resumed.click('[data-action="add-risk"]');resumed.submit('#config-form');assert.equal(resumed.stored().tutorial.step,9);assert.match(resumed.q('h1').textContent,/Workshop/);
-  resumed.submit('#task-form');assert.equal(resumed.stored().tutorial.step,10);await wait(170);assert.equal(resumed.q('h1').textContent,'The Laboratory');
+  resumed.submit('#task-form');assert.equal(resumed.stored().tutorial.step,10);await until(()=>resumed.stored().runs[0].status==='completed'&&resumed.q('h1').textContent==='The Laboratory');assert.equal(resumed.q('h1').textContent,'The Laboratory');
   resumed.click('[data-action="compare"]');assert.equal(resumed.stored().tutorial.step,11);assert.match(resumed.q('#comparison').textContent,/not been confirmed/);assert.match(resumed.d.body.textContent,/11 completed · 0 skipped/);
   resumed.click('[data-view="learn"]');resumed.click('[data-action="toggle-tutorials"]');assert.equal(resumed.d.querySelector('.tutorial'),null);resumed.click('[data-action="restart-tutorial"]');assert.equal(resumed.stored().tutorial.step,0);assert.equal(resumed.stored().agents.length,3);
   console.log('PASS: all 8 lessons / 11 action stages, exact-action detection, creation draft reload, pause/resume, guided navigation, evaluation, instruction improvement, rerun/comparison, disable, and replay.');
   // Failures and cancellation still apply only to the selected agent.
-  reopened.select('Herman');reopened.click('[data-view="blueprint"]');reopened.q('#practice-failure').checked=true;reopened.q('#practice-failure').dispatchEvent(new reopened.w.Event('change'));reopened.click('[data-view="workshop"]');reopened.click('[data-prompt="Summarize the sample document"]');reopened.submit('#task-form');await wait(150);assert.equal(reopened.stored().runs[0].status,'failed');reopened.click('[data-view="laboratory"]');reopened.click('[data-action="retry"]');await wait(280);assert.equal(reopened.stored().runs[0].status,'completed');
+  reopened.select('Herman');reopened.click('[data-view="blueprint"]');reopened.q('#practice-failure').checked=true;reopened.q('#practice-failure').dispatchEvent(new reopened.w.Event('change'));reopened.click('[data-view="workshop"]');reopened.click('[data-prompt="Summarize the sample document"]');reopened.submit('#task-form');await until(()=>reopened.stored().runs[0].status==='failed');assert.equal(reopened.stored().runs[0].status,'failed');reopened.click('[data-view="laboratory"]');reopened.click('[data-action="retry"]');await until(()=>reopened.stored().runs[0].status==='completed');assert.equal(reopened.stored().runs[0].status,'completed');
   reopened.click('[data-view="workshop"]');reopened.click('[data-prompt="Summarize the sample document"]');reopened.submit('#task-form');reopened.click('[data-action="cancel"]');await wait(20);assert.equal(reopened.stored().runs[0].status,'cancelled');
   assert.deepEqual(errors,[]);console.log('PASS: failure/retry/cancel regressions; no UI runtime exceptions.');
 })().catch(e=>{console.error(e);process.exitCode=1;}).finally(()=>windows.forEach(w=>w.close()));

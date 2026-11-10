@@ -1,11 +1,11 @@
 {
   "name": "ai-agent-workshop",
-  "version": "0.2.0-neon-review",
+  "version": "0.3.0-spatial-review",
   "private": true,
   "description": "A themed workshop for simulated agents, queues, collaboration and evaluation",
   "scripts": {
     "start": "node server.cjs",
-    "test": "node tests/runtime.test.cjs && node tests/ui.test.cjs && node tests/edge-cases.test.cjs && node tests/recovery.test.cjs && node tests/management.test.cjs && node tests/themes.test.cjs && node tests/pages.test.cjs",
+    "test": "node tests/runtime.test.cjs && node tests/ui.test.cjs && node tests/edge-cases.test.cjs && node tests/recovery.test.cjs && node tests/management.test.cjs && node tests/themes.test.cjs && node tests/spatial-model.test.cjs && node tests/spatial.test.cjs && node tests/pages.test.cjs",
     "build:pages": "node scripts/build-pages.cjs",
     "test:pages": "node tests/pages.test.cjs",
     "audit:publication": "node scripts/audit-publication.cjs",
