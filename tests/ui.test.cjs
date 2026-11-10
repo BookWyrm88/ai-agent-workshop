@@ -54,10 +54,10 @@ function createAgent(t,name,color='#de8735',shape='square'){
   const migrated=open(JSON.stringify(old));assert.equal(migrated.stored().agents[0].id,old.agents[0].id);assert.equal(migrated.stored().agents[1].color,'#de8735');assert.equal(migrated.stored().agents[0].color,'#569773');assert.equal(migrated.stored().runs.length,old.runs.length);assert.equal(migrated.stored().legacyTutorial.step,4);
   console.log('PASS: v1 save migration retains identities, instructions, histories, and prior tutorial record; assigns Moss green and Herman orange.');
   const lesson=open(undefined,25);const step=n=>assert.equal(lesson.stored().tutorial.step,n,'Tutorial stage');
-  lesson.click('[data-action="start-tutorial"]');step(0);lesson.select('Moss');step(1);
+  lesson.click('[data-action="start-tutorial"]');step(0);lesson.select('Practice Moss');step(1);
   lesson.click('[data-action="new-agent"]');lesson.fill('#new-agent-name','Herman');lesson.fill('[name="avatar"]','square');lesson.click('[data-color="#de8735"]');lesson.submit('#create-form');step(2);
   // Refresh mid-creation restores both draft and tutorial stage.
-  const resumed=open(lesson.save(),25);assert.equal(resumed.stored().tutorial.step,2);assert.match(resumed.q('#dialog-title').textContent,/Create New Agent/);assert.equal(resumed.stored().agents.length,1);
+  const resumed=open(lesson.save(),25);assert.equal(resumed.stored().tutorial.step,2);assert.match(resumed.q('#dialog-title').textContent,/Create New Agent/);assert.equal(resumed.stored().agents.length,3);
   resumed.fill('#create-form [name="instructions"]','Summarize accurately. Use bullets.');resumed.submit('#create-form');assert.equal(resumed.stored().tutorial.step,3);resumed.submit('#create-form');assert.equal(resumed.stored().tutorial.step,4);
   resumed.click('[data-action="pause-tutorial"]');resumed.click('[data-prompt="Summarize the sample document"]');resumed.submit('#task-form');await wait(160);assert.equal(resumed.stored().tutorial.step,4,'Paused tutorials do not advance');
   resumed.click('[data-action="continue-tutorial"]');resumed.click('[data-prompt="Summarize the sample document"]');resumed.submit('#task-form');assert.equal(resumed.stored().tutorial.step,5);await wait(160);
@@ -66,11 +66,13 @@ function createAgent(t,name,color='#de8735',shape='square'){
   resumed.fill('[name="accuracy"]','5');resumed.fill('[name="coverage"]','3');resumed.fill('[name="notes"]','Missing uncertainty.');resumed.submit('#evaluation-form');assert.equal(resumed.stored().tutorial.step,8);assert.match(resumed.q('h1').textContent,/Edit Herman/);
   resumed.click('[data-action="add-risk"]');resumed.submit('#config-form');assert.equal(resumed.stored().tutorial.step,9);assert.match(resumed.q('h1').textContent,/Workshop/);
   resumed.submit('#task-form');assert.equal(resumed.stored().tutorial.step,10);await wait(170);assert.equal(resumed.q('h1').textContent,'The Laboratory');
-  resumed.click('[data-action="compare"]');assert.equal(resumed.stored().tutorial.step,11);assert.match(resumed.q('#comparison').textContent,/not been confirmed/);assert.match(resumed.d.body.textContent,/8 lessons completed/);
-  resumed.click('[data-view="learn"]');resumed.click('[data-action="toggle-tutorials"]');assert.equal(resumed.d.querySelector('.tutorial'),null);resumed.click('[data-action="restart-tutorial"]');assert.equal(resumed.stored().tutorial.step,0);assert.equal(resumed.stored().agents.length,2);
+  resumed.click('[data-action="compare"]');assert.equal(resumed.stored().tutorial.step,11);assert.match(resumed.q('#comparison').textContent,/not been confirmed/);assert.match(resumed.d.body.textContent,/11 completed · 0 skipped/);
+  resumed.click('[data-view="learn"]');resumed.click('[data-action="toggle-tutorials"]');assert.equal(resumed.d.querySelector('.tutorial'),null);resumed.click('[data-action="restart-tutorial"]');assert.equal(resumed.stored().tutorial.step,0);assert.equal(resumed.stored().agents.length,3);
   console.log('PASS: all 8 lessons / 11 action stages, exact-action detection, creation draft reload, pause/resume, guided navigation, evaluation, instruction improvement, rerun/comparison, disable, and replay.');
   // Failures and cancellation still apply only to the selected agent.
   reopened.select('Herman');reopened.click('[data-view="blueprint"]');reopened.q('#practice-failure').checked=true;reopened.q('#practice-failure').dispatchEvent(new reopened.w.Event('change'));reopened.click('[data-view="workshop"]');reopened.click('[data-prompt="Summarize the sample document"]');reopened.submit('#task-form');await wait(150);assert.equal(reopened.stored().runs[0].status,'failed');reopened.click('[data-view="laboratory"]');reopened.click('[data-action="retry"]');await wait(280);assert.equal(reopened.stored().runs[0].status,'completed');
   reopened.click('[data-prompt="Summarize the sample document"]');reopened.submit('#task-form');reopened.click('[data-action="cancel"]');await wait(20);assert.equal(reopened.stored().runs[0].status,'cancelled');
   assert.deepEqual(errors,[]);console.log('PASS: failure/retry/cancel regressions; no UI runtime exceptions.');
 })().catch(e=>{console.error(e);process.exitCode=1;}).finally(()=>windows.forEach(w=>w.close()));
+
+
