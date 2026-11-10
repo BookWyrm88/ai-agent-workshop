@@ -5,7 +5,7 @@ This visual revision uses the reference for mood and spatial intent, not as a co
 ## Saved assets
 
 - `dist/assets/nocturne-room.png`: original 1536 × 1024 architectural environment, with an open central floor and no agents or baked-in central desks.
-- `dist/assets/nocturne-operators.png`: original 1536 × 1024 RGBA operator strip. Transparent corner/gutter pixels were checked. Three silhouettes correspond to existing round, square, and cat appearance choices; identity IDs and colors remain unchanged.
+- `dist/assets/nocturne-operators.png`: original 1536 × 1024 RGBA operator strip. Transparent corner/gutter pixels were checked. Retained from the preceding review for source/art history. The current Neon renderer uses customizable SVG operators instead of this fixed strip.
 
 The reference image, user attachments, and local generated-image account paths are not included in the repository.
 
@@ -13,11 +13,20 @@ The reference image, user attachments, and local generated-image account paths a
 
 `dist/headquarters.js` places individual HTML operator buttons, chair layers, SVG desks, nameplates and status indicators on a shared perspective floor. Back-row workstations are smaller; foreground workstations have larger scale. Vacant desks open the existing creation flow. Additional rows extend the room for larger teams. The room remains scrollable and respects the existing zoom control.
 
-Task states drive breathing, working posture, keyboard/display pulses, waiting and failure indicators. There is no fabricated progress percentage or autonomous movement. Recorded messages use the same explicit workstation anchors for their paths and inspector controls. Reduced-motion CSS preserves all state labels and interaction without animation.
+Task states drive breathing, working posture, keyboard/display pulses, waiting and failure indicators. There is no fabricated progress percentage. Explicit destination requests and a saved after-task preference drive recorded simulator movement. Recorded messages use current operator anchors for their paths and inspector controls, and preserve delivery-position snapshots in their event records. Reduced-motion CSS preserves all state labels and interaction without animation.
 
-The surrounding UI now uses graphite rather than navy. The room fills the main Workshop width, with the functional task console directly below it and an explicit Open task console shortcut. Spectrum and Forest continue using their original renderers.
+The surrounding UI now uses graphite rather than navy. The room fills the main Workshop width, with the functional task console directly below it and an explicit Open task console shortcut. Spectrum and Forest continue using their original workstation renderers, with a shared off-desk zone schematic.
 
-## Generation prompts
+## Stateful layers and characters
+
+Zones are saved domain state in `spatial.js`; the painted room has no authority over occupancy. `space-view.js` draws clickable location beacons and independent moving operators. Workstations are persistent assignments. An empty assigned desk remains visible when its operator leaves. The lounge exposes reserved seats, occupancy and a move action; library, briefing, operations and archive expose real app actions.
+
+`human.js` provides a small layered SVG character renderer: mature body proportions, distinct coat/hair silhouettes, validated appearance inputs, skin/hair colors and accessories. It supplies the same appearance to editor previews, roster portraits and room actors. Walking uses a saved CSS motion path; typing and simple seated posture are scoped to actual movement/task/location states. This is a lightweight procedural illustration, not a full character rig or finished painted character library.
+
+`systems.js` supplies interactive circuit nodes and recorded-data projections for the other tabs. Graphite surfaces, restrained violet edges and warm attention states keep these interfaces distinct from the room without replacing their working controls.
+
+## Generation prompts (earlier environmental assets)
+
 
 ### Architectural plate
 

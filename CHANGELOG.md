@@ -1,3 +1,7 @@
+# 0.3.0-spatial-review — local review, not deployed
+
+Persistent zones, seats, occupancy, reserved movement and refresh recovery; task-driven return to workstations and optional post-task lounge return; human appearance editor and layered SVG operators; optional recorded approval/rejection; functional systems boards and dispatch/context views; spatial events and appearance in validated backups. Existing tutorial, roster, sessions, deterministic collaboration and three themes remain. New work is isolated on `feature/spatial-headquarters`. See REVIEW.md for limitations and deferred integrations.
+
 # Nocturne headquarters visual revision
 
 Expanded Neon into a spatial charcoal loft with generated architectural art, three transparent adult operator silhouettes, individually interactive layered desks, depth rows, task-state animation, and spatially anchored handoffs. The task console remains directly below the room. Spectrum, Forest, saved data and Rainbow release remain unchanged. See ART_DIRECTION.md.
