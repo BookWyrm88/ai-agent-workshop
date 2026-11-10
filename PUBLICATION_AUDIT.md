@@ -2,6 +2,8 @@
 
 Date: 2026-11-10. Scope: tracked review-branch source, generated Pages bundle, tests, scripts, documentation, and commit metadata. This is a local review; no upload, push, merge, or deployment was performed.
 
+Visual revision: two generated PNG assets add an original architectural plate and transparent operator strip. These are project artwork, not user screenshots. The reference image and attachments are excluded. The single-file Pages build embeds both assets for offline use. Generation prompts and asset locations are documented in ART_DIRECTION.md. The staged-file scan was repeated for the revised package.
+
 - Reviewed new persistence, queue dispatch, handoff, session/memory, backup, and theme code. Runtime work stays in the browser. No credentials, model calls, telemetry, or upload endpoints were introduced.
 - New avatars and room art are inline SVG/CSS. The existing optional Google Fonts request remains documented in PRIVACY.md; it does not contain workspace text.
 - Tests use synthetic records. No actual browser workspace was extracted, and no personal export, document, screenshot, attachment, or account file is included.

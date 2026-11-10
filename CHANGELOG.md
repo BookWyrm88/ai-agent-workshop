@@ -1,3 +1,7 @@
+# Nocturne headquarters visual revision
+
+Expanded Neon into a spatial charcoal loft with generated architectural art, three transparent adult operator silhouettes, individually interactive layered desks, depth rows, task-state animation, and spatially anchored handoffs. The task console remains directly below the room. Spectrum, Forest, saved data and Rainbow release remain unchanged. See ART_DIRECTION.md.
+
 # 0.2.0-neon-review — local review, not deployed
 
 Tutorial recovery and isolated practice fixtures; roster/lifecycle/configuration versions; persistent task queues; recorded Research → Evaluation handoffs and shared timeline; sessions/intentional memory; three interchangeable visual themes. The original `v0.1.0-rainbow` tag is unchanged. See README.md for implemented scope and deferred integrations.

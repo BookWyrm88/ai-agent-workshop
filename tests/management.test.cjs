@@ -4,7 +4,7 @@ function open(saved,delay=15){
  const w=new JSDOM('<div id="app"></div><div id="toast"></div>',{url:'https://workshop.test',runScripts:'outside-only',pretendToBeVisual:true}).window;windows.push(w);
  w.structuredClone=structuredClone;w.scrollTo=()=>{};w.HTMLElement.prototype.scrollIntoView=()=>{};w.addEventListener('error',e=>errors.push(e.error));
  if(saved)w.localStorage.setItem('ai-agent-workshop.v1',saved);
- for(const file of ['engine.js','identity.js','model.js','themes.js','app.js']){
+ for(const file of ['engine.js','identity.js','model.js','headquarters.js','themes.js','app.js']){
   w.eval(fs.readFileSync(path.join(__dirname,'../dist',file),'utf8'));
   if(file==='engine.js'){const Original=w.WorkshopCore.AgentRuntime;w.WorkshopCore.AgentRuntime=class extends Original{constructor(){super(undefined,delay);}};}
  }

@@ -2,14 +2,13 @@
 window.WorkshopTheme = (() => {
   const key='ai-agent-workshop.theme.v1',names={neon:'Neon Noir',spectrum:'Spectrum Studio',forest:'Forest Sanctuary'};
   let current='neon';try{const value=localStorage.getItem(key);if(names[value])current=value;}catch{}
-  const apply=()=>{document.documentElement.dataset.theme=current;document.querySelector('meta[name="theme-color"]')?.setAttribute('content',current==='neon'?'#0b1020':current==='forest'?'#142a24':'#f4f0e9');};apply();
+  const apply=()=>{document.documentElement.dataset.theme=current;document.querySelector('meta[name="theme-color"]')?.setAttribute('content',current==='neon'?'#0c0b10':current==='forest'?'#142a24':'#f4f0e9');};apply();
   function select(value){if(!names[value])return;current=value;apply();try{localStorage.setItem(key,value);return true;}catch{return false;}}
   function avatar(a){
     if(current!=='neon')return null;
-    const color=/^#[\da-f]{6}$/i.test(a.color)?a.color:'#77d6e4';
-    const hair=a.avatar==='square'?'M29 53V26Q34 10 53 12L72 26 76 57 65 43 61 30 42 37 33 51Z':a.avatar==='cat'?'M24 65 28 23 43 13 65 18 77 40 73 71 63 60 63 35 49 43 39 29 34 58Z':'M26 58Q19 20 43 12Q74 5 78 39L72 61 64 45 62 29 46 40 35 43 34 59Z';
-    return `<svg class="bot neon-avatar avatar-${a.avatar}" viewBox="0 0 100 140" aria-hidden="true"><ellipse cx="50" cy="131" rx="33" ry="5" fill="#000" opacity=".35"/><path d="m31 111-4 22h16l6-22m8 0 2 22h16l-7-22" fill="#19283c"/><path d="M29 76 13 87 8 119l14 3 8-22 2 24h38l1-24 9 22 13-5-10-29-18-13Z" fill="#26344d" stroke="#50627e"/><path d="m28 79 5 43m35-44-3 44M15 91l11 4m47 0 11-5" stroke="${color}" stroke-width="3"/><path d="m39 69-3 14 14 14 14-14-5-16" fill="#c49d92"/><path d="m35 80 15 17 16-17-5 37H41Z" fill="#101a2e"/><path d="M31 32Q50 17 70 34l-3 29-16 13-16-11Z" fill="#d5b4a5" stroke="#705a65"/><path d="${hair}" fill="#283045" stroke="#60718a" stroke-width="1.2"/><path class="eyes" d="m36 50 8 1m12 0 8-2" fill="none" stroke="#222c3c" stroke-width="2.5"/><path d="m48 58 3 1m-7 7 10-1" stroke="#8d6465" fill="none"/><path d="m29 48-2 16 8 4m35-20 3 15-7 5" stroke="${color}" stroke-width="3" fill="none"/><path d="M28 62h-5V48h6" fill="#18263a" stroke="${color}"/><path d="M36 108h27" stroke="#69768e"/><circle cx="50" cy="106" r="5" fill="${color}"/><path d="m22 114 9-1m40 0 8 1" stroke="${color}" stroke-width="2"/>${a.accessory==='antenna'?`<path d="M26 47V29" stroke="${color}"/><circle cx="26" cy="26" r="3" fill="${color}"/>`:a.accessory==='star'?`<path d="m68 25 3 5 6 1-5 4 1 6-5-3-5 3 1-6-4-4 5-1Z" fill="${color}"/>`:''}</svg>`;
+    return WorkshopHeadquarters.operator(a);
   }
+
   function environment(){
     if(current==='spectrum')return null;
     if(current==='forest')return `<div class="studio-wall"><span class="studio-sign">FOREST SANCTUARY<small>A quiet place for curious minds.</small></span><svg viewBox="0 0 900 180" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="900" height="180" fill="#1a342c"/><circle cx="716" cy="40" r="23" fill="#e5d9af"/><path d="M0 130Q200 40 430 112T900 85V180H0" fill="#305447"/>${[20,85,150,220,680,750,835,885].map((x,i)=>`<path d="m${x} 10-43 120h86Z" fill="${i%2?'#223f35':'#3d6350'}"/><path d="M${x} 90v90" stroke="#a1926b" stroke-width="4"/>`).join('')}<path d="M0 165Q200 125 450 168T900 150V180H0" fill="#466a52"/><g fill="#e5dcad"><circle cx="185" cy="75" r="2"/><circle cx="660" cy="90" r="2"/><circle cx="730" cy="120" r="2"/></g></svg></div>`;

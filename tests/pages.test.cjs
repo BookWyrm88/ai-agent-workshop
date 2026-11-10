@@ -13,6 +13,9 @@ try{
  assert.ok(d.querySelector('[data-action="export"]'));
  assert.ok(d.querySelector('[data-action="import"]'));
  assert.ok(d.querySelector('[data-agent-name="Moss"]'));
+ assert.ok(d.querySelector('.headquarters .hq-station'));
+ assert.ok(html.includes('data:image/png;base64,'),'Scene artwork must travel with the standalone file');
+ assert.ok(!html.includes('url("assets/'),'No missing external art in the standalone build');
  assert.deepEqual(errors,[]);
  console.log('PASS: GitHub Pages project-path entry initializes, all app assets are inline, and export/import controls remain present.');
 }finally{dom.window.close();}

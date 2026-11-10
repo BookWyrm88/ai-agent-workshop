@@ -17,7 +17,7 @@ For a local server, install Node.js 24 or later, run `npm start`, and open the p
 - Independent task queues: reorder/cancel pending work, hold/resume, pause/resume/cancel current work, retry as a new task, configuration snapshots, and history. Refresh cancels active work and holds pending assignments for explicit resume.
 - Recorded collaboration: Research sends its actual output/source to Evaluation, which performs fixed checks. A route/packet in the room and persistent message buttons open an inspector with payload, IDs, timestamps, status, errors, and retries. Both agents' histories and the shared Laboratory timeline show the handoff.
 - Sessions and intentional memory: fresh conversations, prior sessions, manual summaries, explicit context selection, and memory add/edit/delete. Selected context is captured in task traces; no automatic retention or token claims.
-- Three shared themes: default Neon Noir with original SVG operator avatars, displays and a rainy city; retained Spectrum Studio; Forest Sanctuary with woodland scenery. Appearance persists separately from agents. Reduced-motion preferences are respected.
+- Three shared themes: default Neon Noir with original illustrated operator sprites, layered workstations, amber lighting and a rainy city loft; retained Spectrum Studio; Forest Sanctuary with woodland scenery. Appearance persists separately from agents. Reduced-motion preferences are respected.
 - Laboratory: original run inspection, human scoring, and comparison remain alongside queue transitions, shared events, and message inspection.
 
 ## Simulation limits and deferred work
