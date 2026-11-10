@@ -14,7 +14,7 @@ window.WorkshopIdentity = (() => {
   function defaults(name,index=0){index=Math.max(0,index);const moss=/^moss$/i.test(name),herman=/^herman$/i.test(name);return {color:moss?palette[3].value:herman?palette[1].value:palette[[3,1,4,6,0,2,5][index%7]].value,avatar:moss?'round':herman?'square':shapes[index%3].id,accessory:moss?'sprout':herman?'antenna':accessories[index%4].id,symbol:moss?'✿':herman?'◆':symbols[index%7],provider:'simulation',model:'extractive-v1',memory:'history-only'};}
   function normalize(a,index=0){const d=defaults(a.name,index);return {...d,...a,color:validColor(a.color)?a.color:d.color,avatar:shapes.some(s=>s.id===a.avatar)?a.avatar:d.avatar,accessory:accessories.some(s=>s.id===a.accessory)?a.accessory:d.accessory,symbol:symbols.includes(a.symbol)?a.symbol:d.symbol,provider:'simulation',model:'extractive-v1',memory:'history-only'};}
   function style(a){return `--agent:${a.color};--agent-ink:${ink(a.color)}`;}
-  function bot(a){const color=validColor(a.color)?a.color:'#569773';let top='';
+  function bot(a){const themed=window.WorkshopTheme?.avatar(a);if(themed)return themed;const color=validColor(a.color)?a.color:'#569773';let top='';
     if(a.accessory==='sprout')top='<path d="M45 23V10" stroke="#467957" stroke-width="3"/><path d="M44 14C29 14 28 2 31 3c12-2 16 6 13 11" fill="#71a87d"/><path d="M45 13C45 2 58 1 62 4c-2 9-11 12-17 9" fill="#a4c591"/>';
     if(a.accessory==='antenna')top='<path d="M45 22V10" stroke="#4b5061" stroke-width="3"/><circle cx="45" cy="7" r="5" fill="#f7cf6c" stroke="#685c48" stroke-width="1.5"/>';
     if(a.accessory==='star')top='<path d="m45 2 4 8 9 1-7 6 2 9-8-4-8 4 2-9-7-6 9-1z" fill="#f5cc6b" stroke="#886b3e" stroke-width="1.3"/>';

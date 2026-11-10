@@ -11,7 +11,7 @@ function open(saved,delay=50){
   w.addEventListener('error',e=>errors.push(e.error));if(saved)w.localStorage.setItem('ai-agent-workshop.v1',saved);
   w.eval(fs.readFileSync(path.join(root,'engine.js'),'utf8'));
   const Original=w.WorkshopCore.AgentRuntime;w.WorkshopCore.AgentRuntime=class extends Original{constructor(){super(undefined,delay);}};
-  w.eval(fs.readFileSync(path.join(root,'identity.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'model.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'app.js'),'utf8'));
+  w.eval(fs.readFileSync(path.join(root,'identity.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'model.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'themes.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'app.js'),'utf8'));
   const d=w.document;
   const q=s=>{const e=d.querySelector(s);assert.ok(e,'Missing '+s);return e;};
   const click=s=>q(s).click();

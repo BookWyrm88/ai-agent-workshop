@@ -34,6 +34,8 @@ window.WorkshopData = (() => {
   function reorder(state,runId,direction){
     const r=state.runs.find(r=>r.id===runId);if(!r||r.status!=='queued')return;
     const list=pending(state,r.agentId),index=list.indexOf(r),other=list[index+direction];if(!other)return;
+    // Legacy backups can have missing/tied order values; normalize this agent's pending list first.
+    list.forEach((item,i)=>{item.queueOrder=i+1;});
     [r.queueOrder,other.queueOrder]=[other.queueOrder,r.queueOrder];event(r,'queue.reordered','Pending task reordered',{position:index+direction+1});
   }
   function version(state,a,next){
