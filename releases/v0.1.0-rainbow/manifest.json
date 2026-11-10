@@ -1,0 +1,14 @@
+{
+  "release": "v0.1.0-rainbow",
+  "preserved_date": "2026-11-10",
+  "description": "Existing Rainbow application, unchanged; legacy Prototype 0.2 label retained.",
+  "sha256": {
+    "dist/app.js": "0bc38891271fc13dd698ea731cc022c40d5932668cc662c5e39dd70c8137ec6e",
+    "dist/engine.js": "2e3f53eb24e71488ed2a5113a920f1eb080f44ff26a0be8ec79443ecf7fa1399",
+    "dist/identity.js": "a4fd2bbf62a20239e616e4896bd848a12c72a7ef9e15a64bbf5d9c050ca3b52c",
+    "dist/index.html": "56f20039f94800bcc509e839ad8d9d530a2fbba5e2f909653181b32568aa850f",
+    "dist/rainbow.css": "dc86280bd02951a01a8995734df17cc02120a45afd0d5c573c6d60cddaaeb61b",
+    "dist/styles.css": "88a3a85fc45bc9ea66ff2cf4783e173675ce8802a30883cf4b2d96e2b472639c",
+    "docs/index.html": "901af557d57a0bf4b9939d2f4781a6747674634fafba643cc5aede0d3cd3693c"
+  }
+}

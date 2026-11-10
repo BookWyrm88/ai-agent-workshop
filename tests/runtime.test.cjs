@@ -1,0 +1,28 @@
+const assert=require('node:assert/strict');
+if(!globalThis.crypto)globalThis.crypto=require('node:crypto').webcrypto;
+require('../dist/engine.js');
+const {SAMPLE,SimulationProvider,AgentRuntime}=globalThis.WorkshopCore;
+const base={name:'Moss',version:1,tool:true,document:SAMPLE,format:'concise',instructions:'Use bullets.'};
+const provider=new SimulationProvider();
+const output=c=>provider.plan(c,'Summarize the sample document',false).at(-1).data.output;
+const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+(async()=>{
+  const concise=output(base),detailed=output({...base,format:'detailed'});
+  assert.match(concise,/±0\.5°C/,'Decimal data must remain intact');
+  assert.ok(detailed.length>concise.length,'Style changes must affect output');
+  assert.match(output({...base,instructions:'Include risks'}),/not been confirmed/);
+  assert.equal(provider.plan({...base,tool:false},'Summarize',false).at(-1).state,'failed');
+  assert.equal(provider.plan(base,'Summarize',true).at(-1).type,'tool.failed');
+  assert.match(provider.plan(base,'Create an action checklist',false).at(-1).data.output,/Quarantine/);
+  assert.match(provider.plan(base,'What is the weather?',false).at(-1).data.output,/future model integration/);
+  assert.match(output({...base,document:'A plain document without a title. A second sentence.'}),/A plain document/);
+  const runtime=new AgentRuntime(provider,15),events=[];
+  runtime.subscribe(e=>events.push(e));runtime.start('run-1',base,'Summarize');
+  assert.throws(()=>runtime.start('conflict',base,'Summarize'));
+  runtime.pause();const count=events.length;await wait(45);assert.equal(events.length,count);
+  runtime.resume();await wait(120);assert.equal(events.at(-1).type,'task.completed');assert.equal(runtime.active,null);
+  assert.ok(events.every(e=>e.runId==='run-1'&&e.at&&e.id));
+  runtime.start('run-2',base,'Summarize');runtime.cancel();const cancelled=events.length;await wait(45);assert.equal(events.length,cancelled);assert.equal(events.at(-1).state,'cancelled');
+  runtime.start('run-3',base,'Summarize',true);await wait(90);assert.equal(events.at(-1).type,'tool.failed');assert.equal(runtime.active,null);
+  console.log('PASS: summaries, numeric fidelity, configuration changes, permission failure, practice failure, checklist, unsupported requests, pause/resume, concurrent-run guard, cancellation, and event identity.');
+})().catch(error=>{console.error(error);process.exitCode=1;});
