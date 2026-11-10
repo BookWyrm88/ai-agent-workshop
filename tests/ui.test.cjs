@@ -11,7 +11,7 @@ function open(saved,delay=50){
   w.addEventListener('error',e=>errors.push(e.error));if(saved)w.localStorage.setItem('ai-agent-workshop.v1',saved);
   w.eval(fs.readFileSync(path.join(root,'engine.js'),'utf8'));
   const Original=w.WorkshopCore.AgentRuntime;w.WorkshopCore.AgentRuntime=class extends Original{constructor(){super(undefined,delay);}};
-  w.eval(fs.readFileSync(path.join(root,'identity.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'app.js'),'utf8'));
+  w.eval(fs.readFileSync(path.join(root,'identity.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'model.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'app.js'),'utf8'));
   const d=w.document;
   const q=s=>{const e=d.querySelector(s);assert.ok(e,'Missing '+s);return e;};
   const click=s=>q(s).click();
@@ -57,7 +57,7 @@ function createAgent(t,name,color='#de8735',shape='square'){
   lesson.click('[data-action="start-tutorial"]');step(0);lesson.select('Practice Moss');step(1);
   lesson.click('[data-action="new-agent"]');lesson.fill('#new-agent-name','Herman');lesson.fill('[name="avatar"]','square');lesson.click('[data-color="#de8735"]');lesson.submit('#create-form');step(2);
   // Refresh mid-creation restores both draft and tutorial stage.
-  const resumed=open(lesson.save(),25);assert.equal(resumed.stored().tutorial.step,2);assert.match(resumed.q('#dialog-title').textContent,/Create New Agent/);assert.equal(resumed.stored().agents.length,3);
+  const resumed=open(lesson.save(),25);assert.equal(resumed.stored().tutorial.step,2);assert.match(resumed.q('#dialog-title').textContent,/Create New Agent/);assert.equal(resumed.stored().agents.length,2);
   resumed.fill('#create-form [name="instructions"]','Summarize accurately. Use bullets.');resumed.submit('#create-form');assert.equal(resumed.stored().tutorial.step,3);resumed.submit('#create-form');assert.equal(resumed.stored().tutorial.step,4);
   resumed.click('[data-action="pause-tutorial"]');resumed.click('[data-prompt="Summarize the sample document"]');resumed.submit('#task-form');await wait(160);assert.equal(resumed.stored().tutorial.step,4,'Paused tutorials do not advance');
   resumed.click('[data-action="continue-tutorial"]');resumed.click('[data-prompt="Summarize the sample document"]');resumed.submit('#task-form');assert.equal(resumed.stored().tutorial.step,5);await wait(160);
@@ -71,7 +71,7 @@ function createAgent(t,name,color='#de8735',shape='square'){
   console.log('PASS: all 8 lessons / 11 action stages, exact-action detection, creation draft reload, pause/resume, guided navigation, evaluation, instruction improvement, rerun/comparison, disable, and replay.');
   // Failures and cancellation still apply only to the selected agent.
   reopened.select('Herman');reopened.click('[data-view="blueprint"]');reopened.q('#practice-failure').checked=true;reopened.q('#practice-failure').dispatchEvent(new reopened.w.Event('change'));reopened.click('[data-view="workshop"]');reopened.click('[data-prompt="Summarize the sample document"]');reopened.submit('#task-form');await wait(150);assert.equal(reopened.stored().runs[0].status,'failed');reopened.click('[data-view="laboratory"]');reopened.click('[data-action="retry"]');await wait(280);assert.equal(reopened.stored().runs[0].status,'completed');
-  reopened.click('[data-prompt="Summarize the sample document"]');reopened.submit('#task-form');reopened.click('[data-action="cancel"]');await wait(20);assert.equal(reopened.stored().runs[0].status,'cancelled');
+  reopened.click('[data-view="workshop"]');reopened.click('[data-prompt="Summarize the sample document"]');reopened.submit('#task-form');reopened.click('[data-action="cancel"]');await wait(20);assert.equal(reopened.stored().runs[0].status,'cancelled');
   assert.deepEqual(errors,[]);console.log('PASS: failure/retry/cancel regressions; no UI runtime exceptions.');
 })().catch(e=>{console.error(e);process.exitCode=1;}).finally(()=>windows.forEach(w=>w.close()));
 

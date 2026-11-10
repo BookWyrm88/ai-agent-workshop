@@ -5,7 +5,7 @@ const errors=[];
 const dom=new JSDOM('<div id="app"></div><div id="toast"></div>',{url:'http://workshop.test',runScripts:'outside-only',pretendToBeVisual:true});
 const w=dom.window,d=w.document;w.structuredClone=structuredClone;w.scrollTo=()=>{};w.HTMLElement.prototype.scrollIntoView=()=>{};
 w.addEventListener('error',e=>errors.push(e.error));
-for(const f of ['engine.js','identity.js','app.js'])w.eval(fs.readFileSync(path.join(root,f),'utf8'));
+for(const f of ['engine.js','identity.js','model.js','app.js'])w.eval(fs.readFileSync(path.join(root,f),'utf8'));
 const q=s=>d.querySelector(s),click=s=>q(s).click(),submit=s=>q(s).dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));
 const fill=(s,v)=>{q(s).value=v;q(s).dispatchEvent(new w.Event('input',{bubbles:true}));};
 const saved=()=>JSON.parse(w.localStorage.getItem('ai-agent-workshop.v1'));

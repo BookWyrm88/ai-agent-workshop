@@ -3,7 +3,7 @@ const fs=require('node:fs');
 const assert=require('node:assert/strict');
 const w=new JSDOM('<div id="app"></div><div id="toast"></div>',{url:'https://workshop.test',runScripts:'outside-only',pretendToBeVisual:true}).window;
 w.structuredClone=structuredClone;w.scrollTo=()=>{};w.HTMLElement.prototype.scrollIntoView=()=>{};
-for(const file of ['engine.js','identity.js','app.js'])w.eval(fs.readFileSync(require('node:path').join(__dirname,'../dist',file),'utf8'));
+for(const file of ['engine.js','identity.js','model.js','app.js'])w.eval(fs.readFileSync(require('node:path').join(__dirname,'../dist',file),'utf8'));
 const state=()=>JSON.parse(w.localStorage.getItem('ai-agent-workshop.v1'));
 const click=s=>{const el=w.document.querySelector(s);assert.ok(el,s);el.click();};
 try{
