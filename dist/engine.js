@@ -4,7 +4,18 @@
   const SAMPLE = 'Greenhouse sensor trial — QA field notes\n\nThe team tested 24 temperature sensors over seven days. Twenty-two sensors met the acceptance limit of ±0.5°C. Two sensors drifted beyond the limit after exposure to high humidity. Both failures came from batch B. The reference thermometer was calibrated before the trial. Humidity was not controlled, so the cause of the drift has not been confirmed. Quarantine batch B and repeat testing under controlled humidity before release. The trial lead will review the repeat results on Friday.';
   const split = text => { const parts=text.split(/\n\s*\n/);const body=parts.length>1?parts.slice(1).join(' '):text;return body.split(/(?<=[.!?])\s+(?=[A-Z])/).map(x=>x.trim()).filter(Boolean); };
   class SimulationProvider {
-    plan(config, task, fail) {
+    plan(config, task, fail, input) {
+      if(input?.kind==='research.result') {
+        const output=String(input.output||'');
+        const checks={hasResult:output.length>0,hasSourceLabel:/Source:/.test(output),mentionsUncertainty:/not controlled|not been confirmed|uncertain|limitation/i.test(output),sourceAttached:typeof input.sourceDocument==='string'&&input.sourceDocument.length>0};
+        const review='Research review (deterministic simulation)\n\n'+Object.entries(checks).map(([name,pass])=>(pass?'PASS':'CHECK')+' · '+name).join('\n')+'\n\nReviewed '+output.length+' characters from task '+input.sourceTaskId+'. These fixed checks do not establish factual correctness. Human review is still needed.';
+        return [
+          {type:'task.started',state:'working',label:'Evaluation started',data:{provider:'Deterministic simulation',version:config.version}},
+          {type:'evaluation.input',state:'using-tool',label:'Reading received research payload',data:{payload:input}},
+          {type:'evaluation.checked',state:'working',label:'Fixed quality checks applied',data:{checks,method:'Presence checks against the actual received output; no model or external research'}},
+          {type:'task.completed',state:'completed',label:'Evaluation completed',data:{output:review,checks,cost:0,modelTokens:null}}
+        ];
+      }
       const base = [{type:'task.started',state:'working',label:'Task received',data:{task,agent:config.name,version:config.version,provider:'Deterministic simulation'}}];
       if (!config.tool) return [...base,{type:'task.failed',state:'failed',label:'Document tool is disabled',data:{error:'Enable the Sample document tool in Blueprint, save, and retry. No document was read.'}}];
       const steps = [...base,{type:'tool.called',state:'using-tool',label:'Reading sample document',data:{tool:'sample_document.read',input:{document:'workshop-sample'},permission:'Local sample only'}}];
@@ -34,7 +45,7 @@
     constructor(provider=new SimulationProvider(),delay=750){this.provider=provider;this.delay=delay;this.listeners=new Set();this.active=null;}
     subscribe(fn){this.listeners.add(fn);return()=>this.listeners.delete(fn);}
     emit(step){const event={...step,id:crypto.randomUUID(),runId:this.active.id,at:new Date().toISOString()};this.listeners.forEach(fn=>fn(event));}
-    start(id,config,task,fail=false){if(this.active) throw Error('A run is already active');this.active={id,steps:this.provider.plan(config,task,fail),index:0,paused:false};this.tick();}
+    start(id,config,task,fail=false,input){if(this.active) throw Error('A run is already active');this.active={id,steps:this.provider.plan(config,task,fail,input),index:0,paused:false};this.tick();}
     tick(){if(!this.active||this.active.paused)return;const a=this.active;const step=a.steps[a.index++];if(!step)return;this.emit(step);if(['completed','failed'].includes(step.state)){this.active=null;return;}this.timer=setTimeout(()=>this.tick(),this.delay);}
     pause(){if(!this.active||this.active.paused)return;clearTimeout(this.timer);this.active.paused=true;this.emit({type:'task.paused',state:'paused',label:'Paused by you',data:{message:'The simulation will wait until you resume.'}});}
     resume(){if(!this.active?.paused)return;this.active.paused=false;this.emit({type:'task.resumed',state:'working',label:'Resumed by you',data:{}});this.timer=setTimeout(()=>this.tick(),this.delay);}
