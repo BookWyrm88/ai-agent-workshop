@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Moss Animation Playground · 0.1.0</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        <b>✳</b> NOCTURNE<small>AI AGENT WORKSHOP / MOTION LAB</small>
+      </div>
+      <div class="build">MOSS / 0.1.0<small>ISOLATED PROTOTYPE</small></div>
+    </header>
+    <main>
+      <div class="intro">
+        <div>
+          <div class="eyebrow">ONE OPERATOR. ONE COMPLETE SEQUENCE.</div>
+          <h1>A moment between assignments.</h1>
+          <p>
+            Leave the workstation, settle into the lounge, and find your way
+            back.
+          </p>
+        </div>
+        <div class="simulation">
+          <strong>Animation rehearsal</strong><br />No AI calls.<br />No
+          workspace data changed.
+        </div>
+      </div>
+      <div class="layout">
+        <section class="stage" aria-label="Moss animation scene">
+          <div class="stagebar">
+            <div>MOSS <span>Research operator</span></div>
+            <label
+              >View
+              <select id="camera">
+                <option value="room">Room</option>
+                <option value="character">Character close-up</option>
+              </select></label
+            >
+          </div>
+          <canvas
+            id="scene"
+            aria-label="Animated three-dimensional Moss, workstation and couch"
+          ></canvas>
+          <div id="error" role="alert" hidden></div>
+          <div class="stagefooter">
+            <span>Real-time articulated 3D</span
+            ><b id="location">WORKSTATION</b>
+          </div>
+        </section>
+        <aside>
+          <section class="panel">
+            <div class="eyebrow">CURRENT ACTIVITY</div>
+            <h2 id="state" role="status" aria-live="polite">
+              Working at workstation
+            </h2>
+            <p id="detail">
+              Moss is seated and typing. Send him to the lounge when you’re
+              ready.
+            </p>
+            <div class="progress"><i id="progress"></i></div>
+            <button id="lounge" class="primary">Move to Lounge ↗</button
+            ><button id="desk" disabled>Return to Workstation ↗</button>
+            <div class="paired">
+              <button id="demo">Full demonstration</button
+              ><button id="reset">Reset</button>
+            </div>
+            <div class="options">
+              <label
+                >Playback speed
+                <select id="speed">
+                  <option value="1">Normal</option>
+                  <option value="0.5">Half speed</option>
+                </select></label
+              ><label class="check"
+                ><input id="reduced" type="checkbox" /> Reduce decorative
+                motion</label
+              ><button id="pause">Pause animation</button>
+            </div>
+          </section>
+          <section class="panel trace">
+            <div class="eyebrow">RECENT MOVEMENT</div>
+            <ol id="events"></ol>
+          </section>
+        </aside>
+      </div>
+      <div class="notes">
+        <div>
+          <b>Follow the movement</b>Fixed-length limbs, articulated hips and
+          knees, planted footsteps and deliberate turns.
+        </div>
+        <div>
+          <b>Take a closer look</b>Switch to Character close-up or half speed to
+          inspect the face, joints and seated poses.
+        </div>
+        <div>
+          <b>A separate rehearsal space</b>Your Workshop, agent history and
+          exported backups remain in the original application.
+        </div>
+      </div>
+    </main>
+    <script src="/workshop/spatial.js"></script>
+    <script src="app.bundle.js"></script>
+  </body>
+</html>

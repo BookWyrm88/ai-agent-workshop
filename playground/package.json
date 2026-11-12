@@ -1,0 +1,21 @@
+{
+  "name": "moss-animation-playground",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node serve.cjs",
+    "build": "node build.cjs",
+    "test": "node tests/state.test.cjs",
+    "test:visual": "node tests/visual.cjs",
+    "format": "prettier --write src tests *.cjs index.html style.css"
+  },
+  "dependencies": {
+    "three": "0.187.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "playwright": "1.65.0",
+    "prettier": "3.6.2"
+  }
+}
