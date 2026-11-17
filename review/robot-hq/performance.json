@@ -1,0 +1,86 @@
+{
+  "browser": "157.0.8103.51",
+  "scope": "One local headless Chrome sample per condition. Initial navigation from an intercepted in-memory response; excludes network and disk. Two seconds per idle/active sample. Main thread is CDP TaskDuration, not machine CPU percentage. GPU/power not measured.",
+  "results": [
+    {
+      "version": "previous",
+      "operators": 3,
+      "concurrentRuns": 3,
+      "htmlBytes": 6526421,
+      "scriptBytes": 153346,
+      "loadEventMs": 416,
+      "idle": {
+        "p95FrameMs": 17.1,
+        "frames": 120,
+        "mainThreadMs": 164.7,
+        "usedJSHeapMiB": 1.7
+      },
+      "active": {
+        "p95FrameMs": 17.1,
+        "frames": 120,
+        "mainThreadMs": 334.6,
+        "usedJSHeapMiB": 2.1
+      }
+    },
+    {
+      "version": "previous",
+      "operators": 12,
+      "concurrentRuns": 3,
+      "htmlBytes": 6526421,
+      "scriptBytes": 153346,
+      "loadEventMs": 409,
+      "idle": {
+        "p95FrameMs": 17.2,
+        "frames": 120,
+        "mainThreadMs": 190.7,
+        "usedJSHeapMiB": 2
+      },
+      "active": {
+        "p95FrameMs": 17.1,
+        "frames": 121,
+        "mainThreadMs": 440.2,
+        "usedJSHeapMiB": 1.9
+      }
+    },
+    {
+      "version": "robots",
+      "operators": 3,
+      "concurrentRuns": 3,
+      "htmlBytes": 3507129,
+      "scriptBytes": 171740,
+      "loadEventMs": 342,
+      "idle": {
+        "p95FrameMs": 17.2,
+        "frames": 120,
+        "mainThreadMs": 77.8,
+        "usedJSHeapMiB": 1.7
+      },
+      "active": {
+        "p95FrameMs": 17.2,
+        "frames": 120,
+        "mainThreadMs": 243.9,
+        "usedJSHeapMiB": 2
+      }
+    },
+    {
+      "version": "robots",
+      "operators": 12,
+      "concurrentRuns": 3,
+      "htmlBytes": 3507129,
+      "scriptBytes": 171740,
+      "loadEventMs": 331,
+      "idle": {
+        "p95FrameMs": 17,
+        "frames": 120,
+        "mainThreadMs": 239.3,
+        "usedJSHeapMiB": 1.2
+      },
+      "active": {
+        "p95FrameMs": 17.1,
+        "frames": 120,
+        "mainThreadMs": 375.7,
+        "usedJSHeapMiB": 1.6
+      }
+    }
+  ]
+}

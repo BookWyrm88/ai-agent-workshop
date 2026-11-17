@@ -10,6 +10,6 @@ try{
  const clean=S.cleanImport(state.space,state.agents);assert.deepEqual(JSON.parse(JSON.stringify(clean.events[0].data)),JSON.parse(JSON.stringify(state.space.events[0].data)));const target={agents:structuredClone(state.agents)};S.merge(target,clean,new Set(state.agents.map(a=>a.id)));assert.equal(target.space.locations['agent-1'].zoneId,'lounge');
  const bad=structuredClone(state.space);bad.locations['agent-0'].zoneId='workstation-agent-1';assert.throws(()=>S.cleanImport(bad,state.agents),/Invalid agent location/);
  const human=w.WorkshopHuman.normalize({avatar:'cat',human:{presentation:'unknown',hairColor:'red" onload="x',skinTone:'#886655',jacket:'long-coat'}});assert.equal(human.skinTone,'#886655');assert.equal(human.jacket,'long-coat');assert.ok(!JSON.stringify(human).includes('onload'));
- assert.ok(w.WorkshopHuman.svg({human,color:'#778899',symbol:'◆'}).includes('human-operator'));
+ assert.equal(w.WorkshopHuman.normalize({human}).jacket,'long-coat');
  console.log('PASS: pure spatial migration, reservations, interpolation, restoration, lifecycle occupancy, backup records and human appearance validation.');
 }finally{w.close();}

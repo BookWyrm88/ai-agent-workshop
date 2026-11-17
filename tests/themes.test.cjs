@@ -1,12 +1,12 @@
 const {JSDOM}=require('jsdom'),fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'../dist'),windows=[];
-function open(saved,theme){const w=new JSDOM('<div id="app"></div><div id="toast"></div>',{url:'https://workshop.test',runScripts:'outside-only'}).window;windows.push(w);w.structuredClone=structuredClone;w.scrollTo=()=>{};w.HTMLElement.prototype.scrollIntoView=()=>{};if(saved)w.localStorage.setItem('ai-agent-workshop.v1',saved);if(theme)w.localStorage.setItem('ai-agent-workshop.theme.v1',theme);for(const name of ['engine.js','human.js','identity.js','model.js','spatial.js','space-view.js','systems.js','headquarters.js','themes.js','app.js'])w.eval(fs.readFileSync(path.join(root,name),'utf8'));return w;}
+function open(saved,theme){const w=new JSDOM('<div id="app"></div><div id="toast"></div>',{url:'https://workshop.test',runScripts:'outside-only'}).window;windows.push(w);w.structuredClone=structuredClone;w.scrollTo=()=>{};w.HTMLElement.prototype.scrollIntoView=()=>{};if(saved)w.localStorage.setItem('ai-agent-workshop.v1',saved);if(theme)w.localStorage.setItem('ai-agent-workshop.theme.v1',theme);for(const name of ['engine.js','human.js','robot.js','robot-floor.js','identity.js','model.js','spatial.js','space-view.js','systems.js','headquarters.js','themes.js','app.js'])w.eval(fs.readFileSync(path.join(root,name),'utf8'));return w;}
 try{
  const w=open(),d=w.document;
  assert.equal(d.documentElement.dataset.theme,'neon');assert.ok(d.querySelector('.neon-avatar'));assert.match(d.querySelector('.studio-sign').textContent,/NOCTURNE/);
  assert.ok(d.querySelector('.headquarters .hq-architecture'));
- assert.equal(d.querySelectorAll('.hq-station').length,1);
- assert.equal(d.querySelectorAll('.vacant-station').length,5);
+ assert.equal(d.querySelectorAll('.hq-station').length,3);
+ assert.equal(d.querySelectorAll('.vacant-station').length,3);
  const scene=w.WorkshopHeadquarters;
  assert.ok(scene.slot(3).y>scene.slot(0).y,'Stations occupy distinct depth rows');
  assert.ok(scene.slot(3).scale>scene.slot(0).scale,'Foreground stations are larger');

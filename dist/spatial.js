@@ -52,8 +52,13 @@ window.WorkshopSpatial = (() => {
     const taken=new Set(occupants(state,destination).filter(o=>o.agentId!==agentId).map(o=>o.seat));
     const toSeat=z.seats.findIndex((_,i)=>!taken.has(i));if(toSeat<0)throw Error(z.name+' is full. Choose another zone or move an occupant first.');
     const from=clone(l.position),to=clone(z.seats[toSeat]);
-    const lane=from.y>720||to.y>720?Math.max(from.y,to.y)+55:585;
-    const points=[from,{x:from.x,y:lane},{x:to.x,y:lane},to];
+    // Enter/leave a workstation beside its tabletop; use the aisle between rows.
+    const origin=zone(state,l.zoneId),deskDoor=(p,sign)=>({x:p.x+sign*128,y:p.y-62});
+    const side=to.x>=from.x?1:-1;
+    const exit=origin.type==='workstation'?deskDoor(from,side):from;
+    const entry=z.type==='workstation'?deskDoor(to,-side):to;
+    const lane=Math.max(531,origin.type==='workstation'?from.y+27:0,z.type==='workstation'?to.y+27:0);
+    const points=[from,exit,{x:exit.x,y:lane},{x:entry.x,y:lane},entry,to].filter((p,i,all)=>!i||p.x!==all[i-1].x||p.y!==all[i-1].y);
     l.move={id:crypto.randomUUID(),fromZoneId:l.zoneId,toZoneId:destination,toSeat,from,to,points,startedAt:Date.now(),duration:api.motionMs,reason};l.activity='moving';
     record(state,a,'movement.started','Moving to '+z.name,{fromZoneId:l.zoneId,toZoneId:destination,from,to,reason,movementId:l.move.id});sync(state);return true;
   }
@@ -96,5 +101,5 @@ window.WorkshopSpatial = (() => {
     }
     state.space.events.push(...clean.events.filter(e=>added.has(e.agentId)&&!state.space.events.some(x=>x.id===e.id)));state.space.events=state.space.events.slice(-500);sync(state);
   }
-  const api={motionMs:1600,baseZones,workId,zone,slot,occupants,sync,move,arrive,restore,position,cleanImport,merge};return api;
+  const api={motionMs:2800,baseZones,workId,zone,slot,occupants,sync,move,arrive,restore,position,cleanImport,merge};return api;
 })();

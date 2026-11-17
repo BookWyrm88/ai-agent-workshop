@@ -1,19 +1,27 @@
-# AI Agent Workshop — Spatial headquarters review
+# AI Agent Workshop — Robot headquarters review
 
-A browser-local headquarters for agents, queues, collaboration, and evaluation. This is **0.3.0-spatial-review** on `feature/spatial-headquarters`. It has not been merged or deployed. The preserved `v0.1.0-rainbow` tag remains unchanged.
+A browser-local headquarters for agents, queues, collaboration, and evaluation. This is **0.4.0-robot-review** on `feature/robot-headquarters`. It has not been merged or deployed. The preserved `v0.1.0-rainbow` tag remains unchanged.
 
 ## Open and review
 
-Double-click **Open Workshop.cmd**, or open **docs/index.html** in Chrome, Edge, or Firefox. No installation or API key is needed. The separate **AI Agent Workshop - Neon Review.html** deliverable contains the same self-contained app.
+Double-click **Open Workshop.cmd**, or open **docs/index.html** in Chrome, Edge, or Firefox. No installation or API key is needed. The separate **AI Agent Workshop - Robot HQ 0.4.0.html** deliverable contains the same self-contained app.
 
 For a local server, install Node.js 24 or later, run `npm start`, and open the printed address. Static hosting can use `dist/`; the GitHub Pages entry remains `docs/index.html` and works at a repository subpath.
 
 **Export a backup from your current Rainbow app before moving data.** Open the review at its separate address and choose Import backup. Different paths, browser profiles, or sites may have separate storage. Keep the old Rainbow file and backup until review is approved. See [REVIEW.md](REVIEW.md).
 
+## Try the robot floor
+
+Select Moss, Herman, or Elmyra and choose **Run sample task**. Switch operators during a run to see independent activity bubbles. **Move to lounge** sends an idle operator to a reserved seat; **Return to workstation** brings it back. **Research → Evaluation** opens the two-agent assignment form. Run it and click **Inspect delivery** on the floor, or inspect the saved handoff in Laboratory afterward.
+
+Fresh workspaces start with three operators. Existing saves retain their roster, IDs, human appearance metadata, and task histories. The new robot settings are versioned through Blueprint. The separate Moss 3D playground remains intact and is not loaded by the Workshop.
+
+[Rendered walkthrough and measurements](review/robot-hq/README.md) · [Open the standalone app](docs/index.html)
+
 ## Implemented
 
 - Stateful headquarters: assigned workstations, lounge seats, briefing area, library, task operations and archive have persistent IDs, positions, activities and occupancy. Idle operators can travel; queued work returns them to their desk before execution. Reservations prevent shared destination seats. Rest/archive releases occupancy. An optional after-task preference returns operators to the lounge.
-- Human operator customization in Neon: visual presentation, hair length/style/color, skin tone, jacket, accessories, accent and symbol, with a live SVG preview. Stored human appearance coexists with the original companion appearance for Spectrum/Forest. Changing themes does not mutate identity or run history.
+- Neon robot customization: helmet, chassis, eyes, accent, accessory, symbol and decorative trim. Historical human-style settings are retained as compatibility data.
 - Recorded human approval: optionally gate newly assigned tasks per operator, approve or reject their saved configuration, and inspect approval events. Waiting tasks survive refresh with the queue held. This is a local simulator control, not permission for an external service.
 - Systems interfaces: clickable Blueprint circuit, recorded diagnostic counts, multi-agent dispatch columns, operator directory and context-vault structure, plus training/configuration terminals. These project actual application state and navigate to existing functional controls.
 
@@ -22,7 +30,7 @@ For a local server, install Node.js 24 or later, run `npm start`, and open the p
 - Independent task queues: reorder/cancel pending work, hold/resume, pause/resume/cancel current work, retry as a new task, configuration snapshots, and history. Refresh cancels active work and holds pending assignments for explicit resume.
 - Recorded collaboration: Research sends its actual output/source to Evaluation, which performs fixed checks. A route/packet in the room and persistent message buttons open an inspector with payload, IDs, timestamps, status, errors, and retries. Both agents' histories and the shared Laboratory timeline show the handoff.
 - Sessions and intentional memory: fresh conversations, prior sessions, manual summaries, explicit context selection, and memory add/edit/delete. Selected context is captured in task traces; no automatic retention or token claims.
-- Three shared themes: default Neon Noir with configurable human operators, layered workstations, amber lighting and a rainy city loft; retained Spectrum Studio; Forest Sanctuary with woodland scenery. Theme preference persists separately from agent configuration. Reduced-motion preferences are respected.
+- Three shared themes: default Neon Noir with configurable robot operators, layered workstations, amber lighting and a rainy city loft; retained Spectrum Studio; Forest Sanctuary with woodland scenery. Theme preference persists separately from agent configuration. Reduced-motion preferences are respected.
 - Laboratory: original run inspection, human scoring, and comparison remain alongside queue transitions, shared events, and message inspection.
 
 ## Simulation limits and deferred work
@@ -33,7 +41,7 @@ Session context and memories are separated and recorded, but the extractor still
 
 Real providers/tools, backend scheduling, secure credentials, external-action approval, semantic retrieval, editable orchestration graphs, and evaluation datasets remain future integrations. Permanent agent deletion is deferred; archive/restore is available. No placeholder controls claim those features work.
 
-Spatial routes use fixed lanes and seat reservations, not full collision/obstacle pathfinding. Neon has animated travel; Spectrum/Forest retain their art and show off-desk occupants in a zone schematic. Fully illustrated character rigs and editable workflow graphs remain deferred. See [REVIEW.md](REVIEW.md) for the complete review limits.
+Spatial routes use fixed lanes and seat reservations, not full collision/obstacle pathfinding. Neon has animated travel; Spectrum/Forest retain their art and show off-desk occupants in a zone schematic. Fully illustrated character rigs and editable workflow graphs remain deferred. See the [robot review report](review/robot-hq/README.md) for this build’s measurements and limits.
 
 ## Data and privacy
 
@@ -41,7 +49,7 @@ The original `ai-agent-workshop.v1` key is retained. IDs, configurations, messag
 
 Records stay in this browser, unencrypted, subject to storage capacity. Export regularly. Backups contain documents, conversations, handoff payloads, memories, summaries, configuration history, appearance and spatial records; keep them private. Imports validate before merging new agents, preserve existing IDs unchanged, and hold imported queues. They do not replace existing agents or import tutorial progress/unsaved drafts into the destination. Refresh at the same address preserves progress.
 
-Theme preference uses a separate `ai-agent-workshop.theme.v1` key. See [PRIVACY.md](PRIVACY.md) for origin scope and font requests.
+Theme preference uses a separate `ai-agent-workshop.theme.v1` key. See [PRIVACY.md](PRIVACY.md) for origin scope and offline behavior.
 
 ## Architecture and development
 

@@ -1,6 +1,6 @@
 {
   "name": "ai-agent-workshop",
-  "version": "0.3.0-spatial-review",
+  "version": "0.4.0-robot-review",
   "private": true,
   "description": "A themed workshop for simulated agents, queues, collaboration and evaluation",
   "scripts": {
@@ -10,7 +10,9 @@
     "test:pages": "node tests/pages.test.cjs",
     "audit:publication": "node scripts/audit-publication.cjs",
     "audit:staged": "node scripts/audit-publication.cjs --staged",
-    "verify:rainbow": "node scripts/verify-rainbow.cjs"
+    "verify:rainbow": "node scripts/verify-rainbow.cjs",
+    "test:floor": "node tests/robot-browser.cjs",
+    "measure:floor": "node tests/robot-performance.cjs"
   },
   "engines": {
     "node": ">=24"

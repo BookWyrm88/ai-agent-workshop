@@ -42,7 +42,7 @@
     }
   }
   class AgentRuntime {
-    constructor(provider=new SimulationProvider(),delay=750){this.provider=provider;this.delay=delay;this.listeners=new Set();this.active=null;}
+    constructor(provider=new SimulationProvider(),delay=1400){this.provider=provider;this.delay=delay;this.listeners=new Set();this.active=null;}
     subscribe(fn){this.listeners.add(fn);return()=>this.listeners.delete(fn);}
     emit(step){const event={...step,id:crypto.randomUUID(),runId:this.active.id,at:new Date().toISOString()};this.listeners.forEach(fn=>fn(event));}
     start(id,config,task,fail=false,input){if(this.active) throw Error('A run is already active');this.active={id,steps:this.provider.plan(config,task,fail,input),index:0,paused:false};this.tick();}

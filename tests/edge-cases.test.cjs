@@ -5,7 +5,7 @@ const errors=[];
 const dom=new JSDOM('<div id="app"></div><div id="toast"></div>',{url:'http://workshop.test',runScripts:'outside-only',pretendToBeVisual:true});
 const w=dom.window,d=w.document;w.structuredClone=structuredClone;w.localStorage.setItem('ai-agent-workshop.theme.v1','spectrum');w.scrollTo=()=>{};w.HTMLElement.prototype.scrollIntoView=()=>{};
 w.addEventListener('error',e=>errors.push(e.error));
-for(const f of ['engine.js','human.js','identity.js','model.js','spatial.js','space-view.js','systems.js','headquarters.js','themes.js','app.js'])w.eval(fs.readFileSync(path.join(root,f),'utf8'));
+for(const f of ['engine.js','human.js','robot.js','robot-floor.js','identity.js','model.js','spatial.js','space-view.js','systems.js','headquarters.js','themes.js','app.js']){w.eval(fs.readFileSync(path.join(root,f),'utf8'));if(f==='engine.js')w.localStorage.setItem('ai-agent-workshop.v1',require('./legacy-workspace.cjs')(w));}
 const q=s=>d.querySelector(s),click=s=>q(s).click(),submit=s=>q(s).dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));
 const fill=(s,v)=>{q(s).value=v;q(s).dispatchEvent(new w.Event('input',{bubbles:true}));};
 const saved=()=>JSON.parse(w.localStorage.getItem('ai-agent-workshop.v1'));

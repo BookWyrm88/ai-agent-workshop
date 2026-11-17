@@ -11,8 +11,9 @@ function open(saved,delay=50){
   windows.push(dom.window);const w=dom.window;w.structuredClone=structuredClone;w.localStorage.setItem('ai-agent-workshop.theme.v1','spectrum');w.scrollTo=()=>{};w.HTMLElement.prototype.scrollIntoView=()=>{};
   w.addEventListener('error',e=>errors.push(e.error));if(saved)w.localStorage.setItem('ai-agent-workshop.v1',saved);
   w.eval(fs.readFileSync(path.join(root,'engine.js'),'utf8'));
+  if(!saved)w.localStorage.setItem('ai-agent-workshop.v1',require('./legacy-workspace.cjs')(w));
   const Original=w.WorkshopCore.AgentRuntime;w.WorkshopCore.AgentRuntime=class extends Original{constructor(){super(undefined,delay);}};
-  w.eval(fs.readFileSync(path.join(root,'human.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'identity.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'spatial.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'space-view.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'model.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'systems.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'headquarters.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'themes.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'app.js'),'utf8'));
+  w.eval(fs.readFileSync(path.join(root,'human.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'robot.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'robot-floor.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'identity.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'spatial.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'space-view.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'model.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'systems.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'headquarters.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'themes.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'app.js'),'utf8'));
   const d=w.document;
   const q=s=>{const e=d.querySelector(s);assert.ok(e,'Missing '+s);return e;};
   const click=s=>q(s).click();

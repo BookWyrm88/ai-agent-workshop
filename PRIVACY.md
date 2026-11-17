@@ -16,7 +16,7 @@ Browser storage is scoped to an origin, not a repository path. Separate GitHub P
 
 ## Network behavior
 
-Simulation tasks make no AI API calls and do not send task text to a model. The original stylesheet requests DM Sans and Manrope from Google Fonts; the font service receives ordinary web request information. These font requests do not include workspace contents. System-font fallbacks work offline. GitHub Pages also receives ordinary requests needed to serve the public site. This review has no analytics or application telemetry.
+Simulation tasks make no AI API calls and do not send task text to a model. This review uses local system fonts; the standalone review file makes no external requests. GitHub Pages also receives ordinary requests needed to serve the public site. This review has no analytics or application telemetry.
 
 ## Public repository boundary
 

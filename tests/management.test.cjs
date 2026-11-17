@@ -4,9 +4,9 @@ function open(saved,delay=15){
  const w=new JSDOM('<div id="app"></div><div id="toast"></div>',{url:'https://workshop.test',runScripts:'outside-only',pretendToBeVisual:true}).window;windows.push(w);
  w.structuredClone=structuredClone;w.scrollTo=()=>{};w.HTMLElement.prototype.scrollIntoView=()=>{};w.addEventListener('error',e=>errors.push(e.error));
  if(saved)w.localStorage.setItem('ai-agent-workshop.v1',saved);
- for(const file of ['engine.js','human.js','identity.js','model.js','spatial.js','space-view.js','systems.js','headquarters.js','themes.js','app.js']){
+ for(const file of ['engine.js','human.js','robot.js','robot-floor.js','identity.js','model.js','spatial.js','space-view.js','systems.js','headquarters.js','themes.js','app.js']){
   w.eval(fs.readFileSync(path.join(__dirname,'../dist',file),'utf8'));
-  if(file==='engine.js'){const Original=w.WorkshopCore.AgentRuntime;w.WorkshopCore.AgentRuntime=class extends Original{constructor(){super(undefined,delay);}};}
+  if(file==='engine.js'){if(!saved)w.localStorage.setItem('ai-agent-workshop.v1',require('./legacy-workspace.cjs')(w));const Original=w.WorkshopCore.AgentRuntime;w.WorkshopCore.AgentRuntime=class extends Original{constructor(){super(undefined,delay);}};}
  }
  const q=s=>{const e=w.document.querySelector(s);assert.ok(e,'Missing '+s);return e;},click=s=>q(s).click(),state=()=>JSON.parse(w.localStorage.getItem('ai-agent-workshop.v1'));
  const fill=(s,value)=>{const e=q(s);e.value=value;e.dispatchEvent(new w.Event('input',{bubbles:true}));e.dispatchEvent(new w.Event('change',{bubbles:true}));};
